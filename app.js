@@ -16,6 +16,7 @@ const tours = JSON.parse(fs.readFileSync('./starter/dev-data/data/tours-simple.j
 app.get('/api/v1/tours', (req, res) => {
     res.status(200).json({
         status: 'success',
+        results: tours.length, //not necessary but it's good practice to return a count of items in an array
         data: {
             tours: tours
         }
