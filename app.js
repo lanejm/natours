@@ -70,7 +70,7 @@ app.post('/api/v1/tours', (req, res) => {
     )
 })
 
-//PATCH requests
+//PATCH requests - example, doesn't really do anything in this case
 app.patch('/api/v1/tours/:id', (req,res)=>{
 
     const id = req.params.id * 1 //convert string to a number
@@ -87,6 +87,24 @@ app.patch('/api/v1/tours/:id', (req,res)=>{
         data: {
             tour: "<Updated tour here...>"
         }
+    })
+} );
+
+//DELETE requests - just and example, doesn't really delete tour
+app.delete('/api/v1/tours/:id', (req,res)=>{
+
+    const id = req.params.id * 1 //convert string to a number
+    const tour = tours.find(el => el.id === id)
+    if(!tour){
+        return  res.status(404).json({
+                status: 'fail',
+                message: `Tour with id ${id} not found.`
+             });
+    }
+    
+    res.status(204).json({
+        status: 'success',
+        data: null
     })
 } );
 
