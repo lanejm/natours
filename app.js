@@ -8,6 +8,7 @@ const app = express();
 //1) MIDDLEWARES
 app.use(morgan("dev"));
 app.use(express.json());
+app.use(express.static("./starter/public"));
 
 app.use((req, res, next) => {
   next(); //always need to use next in middleware
@@ -25,4 +26,4 @@ app.use("/api/v1/users", userRouter);
 
 //4) START THE SERVER
 
-module.exports = app
+module.exports = app;
