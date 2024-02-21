@@ -4,6 +4,15 @@ const app = express();
 
 app.use(express.json()); //middleware
 
+app.use((req, res, next) => {
+    next() //always need to use next in middleware
+})
+
+app.use((req, res, next) => {
+    req.requestTime = new Date().toISOString();
+    next()
+})
+
 const tours = JSON.parse(
   fs.readFileSync("./starter/dev-data/data/tours-simple.json")
 );
@@ -11,6 +20,7 @@ const tours = JSON.parse(
 const getAllTours = (req, res) => {
   res.status(200).json({
     status: "success",
+    requestedAt: req.requestTime,
     results: tours.length, //not necessary but it's good practice to return a count of items in an array
     data: {
       tours: tours,
