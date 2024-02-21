@@ -70,6 +70,26 @@ app.post('/api/v1/tours', (req, res) => {
     )
 })
 
+//PATCH requests
+app.patch('/api/v1/tours/:id', (req,res)=>{
+
+    const id = req.params.id * 1 //convert string to a number
+    const tour = tours.find(el => el.id === id)
+    if(!tour){
+        return  res.status(404).json({
+                status: 'fail',
+                message: `Tour with id ${id} not found.`
+             });
+    }
+    
+    res.status(200).json({
+        status: 'success',
+        data: {
+            tour: "<Updated tour here...>"
+        }
+    })
+} );
+
 const port = 3000
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`)
