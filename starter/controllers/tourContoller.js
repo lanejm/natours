@@ -66,18 +66,12 @@ exports.createTour = async (req, res) => {
     });
   }
 
-  exports.updateTour = async (req, res) => {
-    try {
+  exports.updateTour = (req, res) => {
     res.status(200).json({
       status: 'success',
       data: {
         tour: '<Updated tour here...>',
       },
-    });
-  } catch (err) {
-    res.status(500).json({
-      status: 'error',
-      message: 'Server error!',
     });
   };
 
@@ -87,5 +81,4 @@ exports.createTour = async (req, res) => {
       data: null,
     });
   };
-}
 };
