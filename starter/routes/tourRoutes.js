@@ -3,7 +3,8 @@ const tourController = require('./../controllers/tourContoller');
 
 const router = express.Router();
 
-router.param('id', tourController.checkID);
+// can be used to define param middleware
+// router.param('id', tourController.checkID);
 
 router
   .route('/')
