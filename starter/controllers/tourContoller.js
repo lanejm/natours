@@ -31,16 +31,26 @@ const Tour = require('./../models/tourModel');
 exports.getAllTours = async (req, res) => {
   try {
     //Build query
-    // 1) Filtering
+    // 1A) Filtering
     const queryObj = {...req.query}
     const excludedFIelds = ['page', 'sort', 'limit', 'fields']
     excludedFIelds.forEach(el => delete queryObj[el]) //delete all the fields that are not needed
 
-    // 2) advanced  filtering
+    // 1B) advanced  filtering
     let queryStr = JSON.stringify(queryObj)
     queryStr = queryStr.replace( /\b(gte|gt|lte|lt)\b/g, match => `$${match}`) //replace gte, gt, lte, lt with $gte, $gt, $lte, $lt
 
-    const query = Tour.find(JSON.parse(queryStr))
+    let query = Tour.find(JSON.parse(queryStr))
+
+    // 2) Sorting
+    if(req.query.sort) { //if sort is in query
+      const sortBy = req.query.sort.split(',').join(' ') //split the string into an array and join it with a space
+      query = query.sort(sortBy)
+      // sort('price' ratingsAverage)
+    }  else {
+      query = query.sort('-createdAt')
+    }
+    
     //execute query
     const tours = await query
     //send response
