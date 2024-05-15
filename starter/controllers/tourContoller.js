@@ -30,8 +30,15 @@ const Tour = require('./../models/tourModel');
 // };
 exports.getAllTours = async (req, res) => {
   try {
-    const tours = await Tour.find();
+    //Build query
+    const queryObj = {...req.query}
+    const excludedFIelds = ['page', 'sort', 'limit', 'fields']
+    excludedFIelds.forEach(el => delete queryObj[el]) //delete all the fields that are not needed
 
+    const query = await Tour.find(queryObj);
+    //execute query
+    const tours = await query
+    //send response
     res.status(200).json({
       status: 'success',
       results: tours.length, //not necessary but it's good practice to return a count of items in an array
