@@ -32,27 +32,36 @@ exports.getAllTours = async (req, res) => {
   try {
     //Build query
     // 1A) Filtering
-    const queryObj = {...req.query}
-    const excludedFIelds = ['page', 'sort', 'limit', 'fields']
-    excludedFIelds.forEach(el => delete queryObj[el]) //delete all the fields that are not needed
+    const queryObj = { ...req.query };
+    const excludedFIelds = ['page', 'sort', 'limit', 'fields'];
+    excludedFIelds.forEach((el) => delete queryObj[el]); //delete all the fields that are not needed
 
     // 1B) advanced  filtering
-    let queryStr = JSON.stringify(queryObj)
-    queryStr = queryStr.replace( /\b(gte|gt|lte|lt)\b/g, match => `$${match}`) //replace gte, gt, lte, lt with $gte, $gt, $lte, $lt
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`); //replace gte, gt, lte, lt with $gte, $gt, $lte, $lt
 
-    let query = Tour.find(JSON.parse(queryStr))
+    let query = Tour.find(JSON.parse(queryStr));
 
     // 2) Sorting
-    if(req.query.sort) { //if sort is in query
-      const sortBy = req.query.sort.split(',').join(' ') //split the string into an array and join it with a space
-      query = query.sort(sortBy)
+    if (req.query.sort) {
+      //if sort is in query
+      const sortBy = req.query.sort.split(',').join(' '); //split the string into an array and join it with a space
+      query = query.sort(sortBy);
       // sort('price' ratingsAverage)
-    }  else {
-      query = query.sort('-createdAt')
+    } else {
+      query = query.sort('-createdAt');
     }
-    
+
+    //3) Field Limiting
+    if (req.query.fields) {
+      const fields = req.query.fields.split(',').join(' ');
+      query = query.select(fields); //select only the fields that are needed
+    } else {
+      query = query.select('-__v'); //select all fields except __v
+    }
+
     //execute query
-    const tours = await query
+    const tours = await query;
     //send response
     res.status(200).json({
       status: 'success',
@@ -77,7 +86,7 @@ exports.getTour = async (req, res) => {
     res.status(200).json({
       status: 'success',
       data: {
-        tour
+        tour,
       },
     });
   } catch (err) {
@@ -94,7 +103,7 @@ exports.createTour = async (req, res) => {
     res.status(201).json({
       status: 'created',
       data: {
-        tour
+        tour,
       },
     });
   } catch (err) {
@@ -115,7 +124,7 @@ exports.updateTour = async (req, res) => {
     res.status(200).json({
       status: 'updated',
       data: {
-        tour
+        tour,
       },
     });
   } catch (err) {
