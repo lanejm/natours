@@ -6,6 +6,8 @@ const router = express.Router();
 // can be used to define param middleware
 // router.param('id', tourController.checkID);
 
+router.route("/top-5-cheap").get(tourController.getAllTours)
+
 router
   .route('/')
   .get(tourController.getAllTours)
